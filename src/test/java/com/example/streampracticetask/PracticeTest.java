@@ -422,6 +422,7 @@ public class PracticeTest {
     @Test
     public void shouldGetAllEmployeesDepartmentIdIs50or80or100(){
         List<Employee> employees = Practice.getAllEmployeesDepartmentIdIs50or80or100();
+        System.out.println(employees);
         int expectedValue = 86;
         Assert.assertEquals(expectedValue, employees.size());
     }

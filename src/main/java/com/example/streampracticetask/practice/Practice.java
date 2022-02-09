@@ -171,67 +171,148 @@ public class Practice {
 
     // Display the maximum salary an employee gets
     public static Long getMaxSalary() throws Exception {
-        return 1L;
+//        return employeeService.readAll().stream()
+//                .max(Comparator.comparing(Employee::getSalary))
+//                .get().getSalary();
+//        return employeeService.readAll().stream()
+//                .map(Employee::getSalary)
+//                .reduce((a, b) -> a > b ? a : b)
+//                .get();
+//                return employeeService.readAll().stream()
+//                .map(Employee::getSalary)
+//                .reduce(Long::max)
+//                .get();
+        return employeeService.readAll().stream()
+                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+                .findFirst().orElseThrow(() -> new Exception("No Employee Found!")).getSalary();
     }
 
     // Display the employee(s) who gets the maximum salary
     public static List<Employee> getMaxSalaryEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
+//        return employeeService.readAll()
+//                .stream().filter(employee -> {
+//                    try {
+//                        return employee.getSalary().equals(getMaxSalary());
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    return false;
+//                }).collect(Collectors.toList());
+        return getAllEmployees()
+                .stream()
+                .max(Comparator.comparing(Employee::getSalary))
+                .stream()
+                .collect(Collectors.toList());
     }
 
     // Display the max salary employee's job
     public static Job getMaxSalaryEmployeeJob() throws Exception {
-        //TODO Implement the method
-        return new Job();
+//        return getMaxSalaryEmployee().get(0).getJob();
+//        return employeeService.readAll().stream()
+//                .max(Comparator.comparing(Employee::getSalary))
+//                .orElseThrow(() -> new Exception("Something went wrong!")).getJob();
+        return getMaxSalaryEmployee().stream()
+                .map(Employee::getJob)
+                .findAny().orElseThrow();
     }
 
     // Display the max salary in Americas Region
     public static Long getMaxSalaryInAmericasRegion() throws Exception {
-        //TODO Implement the method
-        return 1L;
+        return employeeService.readAll().stream()
+                .filter(employee -> employee.getDepartment().getLocation().getCountry().getRegion().getRegionName().equals("Americas"))
+                .max(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new Exception("Something went wrong!")).getSalary();
     }
 
     // Display the second maximum salary an employee gets
     public static Long getSecondMaxSalary() throws Exception {
-        //TODO Implement the method
-        return 1L;
+        return employeeService.readAll().stream()
+                .map(Employee::getSalary)
+                .reduce((a, b) -> {
+                    try {
+                        return a > b && a < getMaxSalary() ? a : b;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }).orElseThrow(() -> new Exception("Employee couldn't be found"));
     }
 
     // Display the employee(s) who gets the second maximum salary
     public static List<Employee> getSecondMaxSalaryEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return employeeService.readAll().stream()
+                .filter(employee -> {
+                    try {
+                        return employee.getSalary().equals(getSecondMaxSalary());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }).collect(Collectors.toList());
     }
 
     // Display the minimum salary an employee gets
     public static Long getMinSalary() throws Exception {
-        //TODO Implement the method
-        return 1L;
+        return employeeService.readAll().stream()
+                .min(Comparator.comparing(Employee::getSalary))
+                .get().getSalary();
     }
 
     // Display the employee(s) who gets the minimum salary
     public static List<Employee> getMinSalaryEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return employeeService.readAll().stream()
+                .filter(employee -> {
+                    try {
+                        return employee.getSalary().equals(getMinSalary());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }).collect(Collectors.toList());
     }
 
     // Display the second minimum salary an employee gets
     public static Long getSecondMinSalary() throws Exception {
-        //TODO Implement the method
-        return 1L;
+//        return employeeService.readAll().stream()
+//                .map(Employee::getSalary)
+//                .reduce((a, b) -> {
+//                    try {
+//                        return a < b && a > getMinSalary() ? a : b;
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    return Long.MAX_VALUE;
+//                }).orElseThrow(() -> new Exception("Something went wrong!"));
+//        return employeeService.readAll().stream()
+//                .map(Employee::getSalary)
+//                .sorted().distinct().limit(2).collect(Collectors.toList()).get(1);
+        return employeeService.readAll().stream()
+                .map(Employee::getSalary)
+                .sorted()
+                .skip(1)
+                .findFirst().get();
     }
 
     // Display the employee(s) who gets the second minimum salary
     public static List<Employee> getSecondMinSalaryEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return employeeService.readAll().stream()
+                .filter(employee -> {
+                    try {
+                        return employee.getSalary().equals(getSecondMinSalary());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }).collect(Collectors.toList());
     }
 
     // Display the average salary of the employees
     public static Double getAverageSalary() {
-        //TODO Implement the method
-        return 1d;
+//        return employeeService.readAll().stream()
+//                .collect(Collectors.averagingDouble(Employee::getSalary));
+        return employeeService.readAll().stream()
+                .mapToDouble(Employee::getSalary)// not simple map !!!!
+                .average().orElse(0d);
     }
 
     // Display all the employees who are making more than average salary
@@ -242,8 +323,7 @@ public class Practice {
 
     // Display all the employees who are making less than average salary
     public static List<Employee> getAllEmployeesBelowAverage() {
-        //TODO Implement the method
-        return new ArrayList<>();
+    return null;
     }
 
     // Display all the employees separated based on their department id number
